@@ -20,6 +20,7 @@ import org.apache.http.HttpStatus;
 
 import com.beaglesecurity.api.payloads.CreateApplication;
 import com.beaglesecurity.api.payloads.CreateApplicationResult;
+import com.beaglesecurity.api.payloads.ModifyApplication;
 import com.beaglesecurity.api.results.APIResult;
 import com.beaglesecurity.api.results.ApplicationResult;
 import com.beaglesecurity.api.results.ApplicationsResult;
@@ -39,14 +40,21 @@ import com.beaglesecurity.execptions.InvalidSessionException;
 import com.beaglesecurity.execptions.InvalidUrlException;
 import com.beaglesecurity.execptions.PlanNotSupportException;
 import com.beaglesecurity.execptions.UnAuthorizedException;
+import com.beaglesecurity.execptions.UrlAlreadyAddedException;
 import com.beaglesecurity.execptions.ValidationException;
 
 public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implements BeagleSecurityClient{
 
+	/**
+	 * @param token
+	 */
 	public BeagleSecurityClientImpl(String token) {
 		this.token = token;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getAllProjects()
+	 */
 	@Override
 	public List<Project> getAllProjects() { 
 		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects", token);
@@ -79,6 +87,9 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getAllProjectsWithApplications()
+	 */
 	@Override
 	public List<ProjectWithApplication> getAllProjectsWithApplications() { 
 		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects?include_applications=true", token);
@@ -110,7 +121,10 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		}
 		return null;
 	}
-	
+		
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getApplication(java.lang.String)
+	 */
 	@Override
 	public Application getApplication(String applicationToken) {
 		HttpReturn ret = HttpUtil.getRequest(baseUrl + "applications?application_token=" + applicationToken, token);
@@ -136,7 +150,7 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new InvalidSessionException("The given token is invalid.");
 				case "NOT_AUTHORIZED":					
 					throw new UnAuthorizedException("You are not authorized.");
-				case "INVALI_APPLICATION_TOKEN":					
+				case "INVALID_APPLICATION_TOKEN":					
 					throw new InvalidApplicationTokenException("Invalid application token.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
@@ -147,6 +161,9 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getApplications(java.util.UUID)
+	 */
 	@Override
 	public List<Application> getApplications(UUID projectKey) {
 		HttpReturn ret = HttpUtil.getRequest(baseUrl + "applications?project_key=" + projectKey, token);
@@ -172,7 +189,7 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new InvalidSessionException("The given token is invalid.");
 				case "NOT_AUTHORIZED":					
 					throw new UnAuthorizedException("You are not authorized.");
-				case "INVALI_PROJECT_KEY":					
+				case "INVALID_PROJECT_KEY":					
 					throw new InvalidProjectKeyException("Invalid project key.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
@@ -183,6 +200,9 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		return null;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#createApplication(java.lang.String, java.lang.String, java.util.UUID, com.beaglesecurity.entities.ApplicationType)
+	 */
 	@Override
 	public Application createApplication(String applicationName, String url, UUID projectKey, ApplicationType type) {
 		if (applicationName == null || applicationName.trim().length() == 0) {
@@ -236,8 +256,74 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new UnAuthorizedException("You are not authorized.");
 				case "INVALID_URL":					
 					throw new InvalidUrlException("Invalid url provided.");
-				case "INVALI_APPLICATION_TOKEN":
-					throw new InvalidApplicationTokenException("Invalid application token.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#modifyApplication(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Application modifyApplication(String applicationToken, String applicationName, String url) {
+		if (applicationToken == null || applicationToken.trim().length() == 0) {
+			throw new ValidationException("Invalid application token.");
+		}
+		
+		if (applicationName == null || applicationName.trim().length() == 0) {
+			throw new ValidationException("Invalid application name.");
+		}
+
+		ModifyApplication app = new ModifyApplication();
+		app.setName(applicationName);		
+		app.setApplicationToken(applicationToken);
+		app.setUrl(url);
+		
+		HttpReturn ret = HttpUtil.putRequest(baseUrl + "applications", app, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to modify application.");
+		}
+		CreateApplicationResult result = null;
+		if (ret.getCode() == HttpStatus.SC_CREATED) {
+			result = convertJsonToObject(ret.getResultJson(), CreateApplicationResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Application application = new Application();
+			application.setApplicationToken(result.getApplicationToken());
+			String appType = result.getType() == null? "WEB" : result.getType().name();
+			application.setApplicationType(appType);
+			application.setName(result.getName());
+			SignatureStatus sigStatus = SignatureStatus.NotVerified;
+			if (Boolean.TRUE.equals(result.getSignatureVerified())) {
+				sigStatus = SignatureStatus.Verified;
+			}
+			application.setSignatureStatus(sigStatus);
+			application.setUrl(result.getUrl());
+			return application;
+			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "INVALID_APPLICATION_TOKEN":
+					throw new InvalidApplicationTokenException("Invalid application token.");					
+				case "INVALID_URL":					
+					throw new InvalidUrlException("Invalid url provided.");
+				case "URL_ALREADY_ADDED":
+					throw new UrlAlreadyAddedException("Url is already added in another application.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
 			}
