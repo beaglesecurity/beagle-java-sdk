@@ -172,5 +172,31 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	Application modifyApplication(String applicationToken, String applicationName, String url);
+
+	/**
+     * <p>
+     * Delete an application using application token
+     * </p>
+     * 
+     * @param applicationToken
+     * @return Application object
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidApplicationTokenException
+     * 		   Given token is not valid
+     * @throws TestInProgressException
+     * 		   A test is in progress
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Application deleteApplication(String applicationToken);
 	
 }

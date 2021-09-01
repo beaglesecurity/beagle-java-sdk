@@ -39,6 +39,7 @@ import com.beaglesecurity.execptions.InvalidProjectKeyException;
 import com.beaglesecurity.execptions.InvalidSessionException;
 import com.beaglesecurity.execptions.InvalidUrlException;
 import com.beaglesecurity.execptions.PlanNotSupportException;
+import com.beaglesecurity.execptions.TestInProgressException;
 import com.beaglesecurity.execptions.UnAuthorizedException;
 import com.beaglesecurity.execptions.UrlAlreadyAddedException;
 import com.beaglesecurity.execptions.ValidationException;
@@ -324,6 +325,58 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new InvalidUrlException("Invalid url provided.");
 				case "URL_ALREADY_ADDED":
 					throw new UrlAlreadyAddedException("Url is already added in another application.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#deleteApplication(java.lang.String)
+	 */
+	@Override
+	public Application deleteApplication(String applicationToken) {
+		HttpReturn ret = HttpUtil.deleteRequest(baseUrl + "applications?application_token=" + applicationToken, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to delete application.");
+		}
+		CreateApplicationResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), CreateApplicationResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Application application = new Application();
+			application.setApplicationToken(result.getApplicationToken());
+			String appType = result.getType() == null? "WEB" : result.getType().name();
+			application.setApplicationType(appType);
+			application.setName(result.getName());
+			SignatureStatus sigStatus = SignatureStatus.NotVerified;
+			if (Boolean.TRUE.equals(result.getSignatureVerified())) {
+				sigStatus = SignatureStatus.Verified;
+			}
+			application.setSignatureStatus(sigStatus);
+			application.setUrl(result.getUrl());
+			return application;			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "INVALID_APPLICATION_TOKEN":
+					throw new InvalidApplicationTokenException("Invalid application token.");
+				case "TEST_RUNNING":
+					throw new TestInProgressException("A test is already running.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
 			}
