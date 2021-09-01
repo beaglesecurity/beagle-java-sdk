@@ -43,12 +43,12 @@ Maven:
 ## Basic Usage
 
 ```java
-	public static void main(String[] args) throws IOException {
-		BeagleSecurityClient client= 
-				BeagleSecurityClientBuilder.instance()
-				.withAPIToken("j69czobljo3ozp2knze4v1554eekp3r9")
-				.build();
-		List<ProjectWithApplication> projects = client.getAllProjectsWithApplications();
-	}
+public static void main(String[] args) throws IOException {
+	BeagleSecurityClient client= 
+			BeagleSecurityClientBuilder.instance()
+			.withAPIToken("j69czobljo3ozp2knze4v1554eekp3r9")
+			.build();
+	List<ProjectWithApplication> projects = client.getAllProjectsWithApplications();
+}
 ```
 
