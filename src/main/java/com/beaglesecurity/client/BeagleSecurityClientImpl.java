@@ -20,7 +20,10 @@ import org.apache.http.HttpStatus;
 
 import com.beaglesecurity.api.payloads.CreateApplication;
 import com.beaglesecurity.api.payloads.CreateApplicationResult;
+import com.beaglesecurity.api.payloads.CreateProject;
+import com.beaglesecurity.api.payloads.CreateProjectResult;
 import com.beaglesecurity.api.payloads.ModifyApplication;
+import com.beaglesecurity.api.payloads.ModifyProject;
 import com.beaglesecurity.api.results.APIResult;
 import com.beaglesecurity.api.results.ApplicationResult;
 import com.beaglesecurity.api.results.ApplicationsResult;
@@ -39,6 +42,7 @@ import com.beaglesecurity.execptions.InvalidProjectKeyException;
 import com.beaglesecurity.execptions.InvalidSessionException;
 import com.beaglesecurity.execptions.InvalidUrlException;
 import com.beaglesecurity.execptions.PlanNotSupportException;
+import com.beaglesecurity.execptions.ProjectAlreadyExistsException;
 import com.beaglesecurity.execptions.TestInProgressException;
 import com.beaglesecurity.execptions.UnAuthorizedException;
 import com.beaglesecurity.execptions.UrlAlreadyAddedException;
@@ -122,6 +126,151 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		}
 		return null;
 	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#createProject(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Project createProject(String projectName, String description) {
+		if (projectName == null || projectName.trim().length() == 0) {
+			throw new ValidationException("Invalid project name.");
+		}
+		CreateProject proj = new CreateProject();
+		proj.setName(projectName);
+		proj.setDescription(description);
+		HttpReturn ret = HttpUtil.postRequest(baseUrl + "projects", proj, token);
+		CreateProjectResult result = null;
+		if (ret.getCode() == HttpStatus.SC_CREATED) {
+			result = convertJsonToObject(ret.getResultJson(), CreateProjectResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Project project = new Project();
+			project.setName(result.getName());
+			project.setDescription(result.getDescription());
+			project.setProjectKey(result.getProjectKey());
+			return project;
+			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "PROJECT_ALREADY_EXISTS":
+					throw new ProjectAlreadyExistsException("Project with name already exists.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#modifyProject(java.util.UUID, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Project modifyProject(UUID projectKey, String projectName, String description) {
+		if (projectKey == null) {
+			throw new ValidationException("Invalid project key.");
+		}
+		if (projectName == null || projectName.trim().length() == 0) {
+			throw new ValidationException("Invalid project name.");
+		}
+		ModifyProject proj = new ModifyProject();
+		proj.setProjectKey(projectKey);
+		proj.setName(projectName);
+		proj.setDescription(description);
+		HttpReturn ret = HttpUtil.putRequest(baseUrl + "projects", proj, token);
+		CreateProjectResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), CreateProjectResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Project project = new Project();
+			project.setName(result.getName());
+			project.setDescription(result.getDescription());
+			project.setProjectKey(result.getProjectKey());
+			return project;
+			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "PROJECT_ALREADY_EXISTS":
+					throw new ProjectAlreadyExistsException("Project with name already exists.");
+				case "INVALID_PROJECT_KEY":
+					throw new InvalidProjectKeyException("Invalid project key provided.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#deleteProject(java.util.UUID)
+	 */
+	@Override
+	public Project deleteProject(UUID projectKey) {
+		if (projectKey == null) {
+			throw new ValidationException("Invalid project key.");
+		}
+		HttpReturn ret = HttpUtil.deleteRequest(baseUrl + "projects?project_key=" + projectKey, token);
+		CreateProjectResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), CreateProjectResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Project project = new Project();
+			project.setName(result.getName());
+			project.setDescription(result.getDescription());
+			project.setProjectKey(result.getProjectKey());
+			return project;
+			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "INVALID_PROJECT_KEY":
+					throw new InvalidProjectKeyException("Invalid project key provided.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
 		
 	/* (non-Javadoc)
 	 * @see com.beaglesecurity.client.BeagleSecurityClient#getApplication(java.lang.String)
@@ -289,7 +438,7 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 			throw new GeneralAPIException("Failed to modify application.");
 		}
 		CreateApplicationResult result = null;
-		if (ret.getCode() == HttpStatus.SC_CREATED) {
+		if (ret.getCode() == HttpStatus.SC_OK) {
 			result = convertJsonToObject(ret.getResultJson(), CreateApplicationResult.class);
 			if (result == null) {
 				throw new GeneralAPIException("Failed to retrieve json data.");

@@ -65,6 +65,95 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	List<ProjectWithApplication> getAllProjectsWithApplications();
+	
+	/**
+     * <p>
+     * Create a new project and return it
+     * </p>
+     * 
+     * @param projectName Name of project
+     * @param description project description
+     * @return Project created project
+     * @throws ValidationException
+     * 		   Parameter validation failure exception
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidUrlException
+     * 		   Given url is not valid
+     * @throws ProjectAlreadyExistsException
+     * 		   The given project already exists
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Project createProject(String projectName, String description);
+	
+	/**
+     * <p>
+     * Modify an existing project and return it
+     * </p>
+     * 
+     * @param projectKey project key to modify
+     * @param projectName Name of project
+     * @param description project description
+     * @return Project modified project
+     * @throws ValidationException
+     * 		   Parameter validation failure exception
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidUrlException
+     * 		   Given url is not valid
+     * @throws ProjectAlreadyExistsException
+     * 		   The given project already exists
+     * @throws InvalidProjectKeyException
+     * 		   The given project key is not valid
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Project modifyProject(UUID projectKey, String projectName, String description);	
+	
+	/**
+     * <p>
+     * Delete a project and return it
+     * </p>
+     * 
+     * @param projectKey project key to delete
+     * @return Project deleted project
+     * @throws ValidationException
+     * 		   Parameter validation failure exception
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidUrlException
+     * 		   Given url is not valid
+     * @throws InvalidProjectKeyException
+     * 		   The given project key is not valid
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Project deleteProject(UUID projectKey);
 
 	/**
      * <p>
@@ -198,5 +287,4 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	Application deleteApplication(String applicationToken);
-	
 }
