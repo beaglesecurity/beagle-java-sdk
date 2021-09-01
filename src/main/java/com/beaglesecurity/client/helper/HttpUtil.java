@@ -25,6 +25,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import com.beaglesecurity.api.payloads.PayloadBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class HttpUtil {

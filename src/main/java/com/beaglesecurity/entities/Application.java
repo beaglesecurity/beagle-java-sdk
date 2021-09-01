@@ -5,6 +5,7 @@ public class Application {
 	private String url;
 	private String applicationToken;
 	private String applicationType;
+	private SignatureStatus signatureStatus;
 	public String getName() {
 		return name;
 	}
@@ -28,5 +29,11 @@ public class Application {
 	}
 	public void setApplicationType(String applicationType) {
 		this.applicationType = applicationType;
+	}
+	public SignatureStatus getSignatureStatus() {
+		return signatureStatus;
+	}
+	public void setSignatureStatus(SignatureStatus signatureStatus) {
+		this.signatureStatus = signatureStatus;
 	}
 }

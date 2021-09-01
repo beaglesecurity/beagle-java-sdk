@@ -11,8 +11,8 @@
  * 
  */
 
-package com.beaglesecurity.client.helper;
+package com.beaglesecurity.api.payloads;
 
-public class PayloadBase {
+public abstract class PayloadBase {
 
 }

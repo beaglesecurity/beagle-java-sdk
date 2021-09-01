@@ -14,7 +14,10 @@
 package com.beaglesecurity.client;
 
 import java.util.List;
+import java.util.UUID;
 
+import com.beaglesecurity.entities.Application;
+import com.beaglesecurity.entities.ApplicationType;
 import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
 
@@ -23,5 +26,11 @@ public interface BeagleSecurityClient {
 	List<Project> getAllProjects();
 
 	List<ProjectWithApplication> getAllProjectsWithApplications();
+
+	Application getApplication(String applicationToken);
+
+	List<Application> getApplications(UUID projectKey);
+
+	Application createApplication(String applicationName, String url, UUID projectKey, ApplicationType type);
 	
 }
