@@ -1,4 +1,4 @@
-package com.beaglesecurity.api.payloads;
+package com.beaglesecurity.api.results;
 
 import com.beaglesecurity.entities.APISignature;
 import com.beaglesecurity.entities.DnsSignature;

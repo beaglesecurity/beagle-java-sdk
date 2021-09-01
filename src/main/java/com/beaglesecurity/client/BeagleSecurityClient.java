@@ -23,6 +23,10 @@ import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
 import com.beaglesecurity.entities.Signature;
 import com.beaglesecurity.entities.SignatureType;
+import com.beaglesecurity.entities.StartTest;
+import com.beaglesecurity.entities.TestRunningSession;
+import com.beaglesecurity.entities.TestSession;
+import com.beaglesecurity.entities.TestStatus;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 
 public interface BeagleSecurityClient {
@@ -341,4 +345,142 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	boolean verifySignature(String applicationToken, SignatureType signatureType, PluginType pluginType);
+
+	/**
+     * <p>
+     * Get the result json, which contains entire vulnerabilities found in the penetration testing process in json format
+     * </p>
+     * 
+     * @param applicationToken
+     * @param resultToken
+     * @return String json result
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	String getTestResultJson(String applicationToken, String resultToken);
+
+	/**
+     * <p>
+     * Starts a new test
+     * </p>
+     * 
+     * @param applicationToken
+     * 
+     * @return StartTest start test result
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	StartTest startTest(String applicationToken);
+
+	/**
+     * <p>
+     * Gets the status of a running session
+     * </p>
+     * 
+     * @param applicationToken
+     * @param resultToken token of a session
+     * 
+     * @return TestStatus status of the session
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	TestStatus getTestStatus(String applicationToken, String resultToken);
+
+	/**
+     * <p>
+     * Stop a running test
+     * </p>
+     * 
+     * @param applicationToken
+     * 
+     * @return boolean true if stop test success, false otherwise
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	boolean stopTest(String applicationToken);
+
+	/**
+     * <p>
+     * Gets a number of test sessions under an application
+     * </p>
+     * 
+     * @param applicationToken
+     * @param count
+     * 
+     * @return List<TestSession> sessions
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	List<TestSession> getTestSessions(String applicationToken, int count);
+
+	/**
+     * <p>
+     * Gets all running sessions under a user
+     * </p>
+     * 
+     * @return List<TestRunningSession> running sessions
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	List<TestRunningSession> getTestRunningSessions();
 }

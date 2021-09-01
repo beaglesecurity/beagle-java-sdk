@@ -1,10 +1,11 @@
-package com.beaglesecurity.api.payloads;
+package com.beaglesecurity.api.results;
 
 import java.util.UUID;
 
 import com.beaglesecurity.entities.ApplicationType;
 
 public class CreateApplicationResult {
+	
 	private String name;
 
 	private String url;

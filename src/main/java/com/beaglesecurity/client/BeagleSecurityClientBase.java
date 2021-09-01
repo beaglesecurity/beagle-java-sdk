@@ -10,9 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BeagleSecurityClientBase {
 	protected static final String baseUrl = "https://api.beaglesecurity.com/rest/v2/";
-	protected String token;
-	protected String formatCreateApplication = "{\"name\" : \"%s\",\"url\" : \"%s\",\"projectKey\" : \"%s\",\"type\" : \"%s\"}";
-	
+	protected String token;	
 	/**
      * <p>
      * Convert a json string to object given as type

@@ -19,18 +19,25 @@ import java.util.UUID;
 import org.apache.http.HttpStatus;
 
 import com.beaglesecurity.api.payloads.CreateApplication;
-import com.beaglesecurity.api.payloads.CreateApplicationResult;
 import com.beaglesecurity.api.payloads.CreateProject;
-import com.beaglesecurity.api.payloads.CreateProjectResult;
 import com.beaglesecurity.api.payloads.ModifyApplication;
 import com.beaglesecurity.api.payloads.ModifyProject;
-import com.beaglesecurity.api.payloads.SignatureResult;
 import com.beaglesecurity.api.payloads.SignatureVerify;
+import com.beaglesecurity.api.payloads.StartTestParam;
+import com.beaglesecurity.api.payloads.StopTestParam;
 import com.beaglesecurity.api.results.APIResult;
 import com.beaglesecurity.api.results.ApplicationResult;
 import com.beaglesecurity.api.results.ApplicationsResult;
+import com.beaglesecurity.api.results.CreateApplicationResult;
+import com.beaglesecurity.api.results.CreateProjectResult;
 import com.beaglesecurity.api.results.ProjectsResult;
 import com.beaglesecurity.api.results.ProjectsWithApplicationResult;
+import com.beaglesecurity.api.results.SignatureResult;
+import com.beaglesecurity.api.results.StartTestResult;
+import com.beaglesecurity.api.results.TestResult;
+import com.beaglesecurity.api.results.TestRunningSessionResult;
+import com.beaglesecurity.api.results.TestSessionResult;
+import com.beaglesecurity.api.results.TestStatusResult;
 import com.beaglesecurity.client.helper.HttpReturn;
 import com.beaglesecurity.client.helper.HttpUtil;
 import com.beaglesecurity.entities.Application;
@@ -41,6 +48,10 @@ import com.beaglesecurity.entities.ProjectWithApplication;
 import com.beaglesecurity.entities.Signature;
 import com.beaglesecurity.entities.SignatureStatus;
 import com.beaglesecurity.entities.SignatureType;
+import com.beaglesecurity.entities.StartTest;
+import com.beaglesecurity.entities.TestRunningSession;
+import com.beaglesecurity.entities.TestSession;
+import com.beaglesecurity.entities.TestStatus;
 import com.beaglesecurity.execptions.GeneralAPIException;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 import com.beaglesecurity.execptions.InvalidProjectKeyException;
@@ -633,5 +644,248 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		return false;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTestResultJson(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public String getTestResultJson(String applicationToken, String resultToken) {
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "test/result?application_token=" + applicationToken + "&result_token=" + resultToken, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to retrieve test result.");
+		}
+		TestResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), TestResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			return result.getResult();
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				default:
+					throw new GeneralAPIException("Failed to retrieve test result.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
 	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#startTest(java.lang.String)
+	 */
+	@Override
+	public StartTest startTest(String applicationToken) {		
+		if (applicationToken == null || applicationToken.trim().length() == 0) {
+			throw new ValidationException("Invalid application token.");
+		}
+		StartTestParam start = new StartTestParam();
+		start.setApplicationToken(applicationToken);
+		
+		
+		HttpReturn ret = HttpUtil.postRequest(baseUrl + "test/start" + applicationToken, start, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to start test.");
+		}		
+		if (ret.getCode() == HttpStatus.SC_OK) {			
+			StartTestResult result = convertJsonToObject(ret.getResultJson(), StartTestResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			StartTest retResult = new StartTest();
+			retResult.setResultToken(result.getResult_token());
+			retResult.setResultUrl(result.getResult_url());
+			retResult.setStatusUrl(result.getStatus_url());
+			return retResult;
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":					
+					throw new GeneralAPIException(apiResult.getMessage());
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTestStatus(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public TestStatus getTestStatus(String applicationToken, String resultToken) {
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "test/status?application_token=" + applicationToken + "&result_token=" + resultToken, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to retrieve test status.");
+		}
+		TestStatusResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), TestStatusResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			TestStatus status = new TestStatus();
+			status.setProgress(result.getProgress());
+			status.setStatus(result.getStatus());
+			return status;
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":					
+					throw new GeneralAPIException(apiResult.getMessage());
+				default:
+					throw new GeneralAPIException("Failed to retrieve test result.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#stopTest(java.lang.String)
+	 */
+	@Override
+	public boolean stopTest(String applicationToken) {		
+		if (applicationToken == null || applicationToken.trim().length() == 0) {
+			throw new ValidationException("Invalid application token.");
+		}
+		StopTestParam stop = new StopTestParam();
+		stop.setApplicationToken(applicationToken);
+		HttpReturn ret = HttpUtil.postRequest(baseUrl + "test/stop" + applicationToken, stop, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to stop test.");
+		}		
+		if (ret.getCode() == HttpStatus.SC_OK) {			
+			return true;
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":					
+					throw new GeneralAPIException(apiResult.getMessage());
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return false;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTestSessions(java.lang.String, int)
+	 */
+	@Override
+	public List<TestSession> getTestSessions(String applicationToken, int count) {
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "test/sessions?application_token=" + applicationToken + "&count=" + count, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to retrieve test sessions.");
+		}
+		TestSessionResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), TestSessionResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			return result.getSessions();
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "INVALID_APPLICATION_TOKEN":
+					throw new InvalidApplicationTokenException("Application token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":					
+					throw new GeneralAPIException(apiResult.getMessage());
+				default:
+					throw new GeneralAPIException("Failed to retrieve test result.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTestRunningSessions()
+	 */
+	@Override
+	public List<TestRunningSession> getTestRunningSessions() {
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "test/runningsessions", token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to retrieve running sessions.");
+		}
+		TestRunningSessionResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), TestRunningSessionResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			return result.getSessions();
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "FAILED":					
+					throw new GeneralAPIException(apiResult.getMessage());
+				default:
+					throw new GeneralAPIException("Failed to retrieve test result.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
 }
