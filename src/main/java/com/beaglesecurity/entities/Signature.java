@@ -1,0 +1,44 @@
+package com.beaglesecurity.entities;
+
+import com.beaglesecurity.entities.APISignature;
+import com.beaglesecurity.entities.DnsSignature;
+import com.beaglesecurity.entities.FileSignature;
+import com.beaglesecurity.entities.SignatureStatus;
+
+public class Signature {
+	private SignatureStatus status;
+	private String url;
+    private FileSignature fileSignature;
+    private DnsSignature dnsSignature;
+    private APISignature apiSignature;
+	public SignatureStatus getStatus() {
+		return status;
+	}
+	public void setStatus(SignatureStatus status) {
+		this.status = status;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public FileSignature getFileSignature() {
+		return fileSignature;
+	}
+	public void setFileSignature(FileSignature fileSignature) {
+		this.fileSignature = fileSignature;
+	}
+	public DnsSignature getDnsSignature() {
+		return dnsSignature;
+	}
+	public void setDnsSignature(DnsSignature dnsSignature) {
+		this.dnsSignature = dnsSignature;
+	}
+	public APISignature getApiSignature() {
+		return apiSignature;
+	}
+	public void setApiSignature(APISignature apiSignature) {
+		this.apiSignature = apiSignature;
+	}
+}

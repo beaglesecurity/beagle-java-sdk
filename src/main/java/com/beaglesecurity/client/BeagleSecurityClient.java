@@ -18,8 +18,11 @@ import java.util.UUID;
 
 import com.beaglesecurity.entities.Application;
 import com.beaglesecurity.entities.ApplicationType;
+import com.beaglesecurity.entities.PluginType;
 import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
+import com.beaglesecurity.entities.Signature;
+import com.beaglesecurity.entities.SignatureType;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 
 public interface BeagleSecurityClient {
@@ -287,4 +290,55 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	Application deleteApplication(String applicationToken);
+
+	/**
+     * <p>
+     * Gets signature of the given application
+     * </p>
+     * 
+     * @param applicationToken
+     * @return Application object
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidApplicationTokenException
+     * 		   Given token is not valid
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Signature getSignature(String applicationToken);
+
+	/**
+     * <p>
+     * Verify signature of an application
+     * if signatureType is Plugin, then pluginType needs to provide. Otherwise pluginType will be null
+     * </p>
+     * 
+     * @param applicationToken
+     * @param signatureType
+     * @param pluginType
+     * @return boolean true if verify signature success
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidApplicationTokenException
+     * 		   Given token is not valid
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	boolean verifySignature(String applicationToken, SignatureType signatureType, PluginType pluginType);
 }

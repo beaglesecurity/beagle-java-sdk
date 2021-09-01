@@ -24,6 +24,8 @@ import com.beaglesecurity.api.payloads.CreateProject;
 import com.beaglesecurity.api.payloads.CreateProjectResult;
 import com.beaglesecurity.api.payloads.ModifyApplication;
 import com.beaglesecurity.api.payloads.ModifyProject;
+import com.beaglesecurity.api.payloads.SignatureResult;
+import com.beaglesecurity.api.payloads.SignatureVerify;
 import com.beaglesecurity.api.results.APIResult;
 import com.beaglesecurity.api.results.ApplicationResult;
 import com.beaglesecurity.api.results.ApplicationsResult;
@@ -33,9 +35,12 @@ import com.beaglesecurity.client.helper.HttpReturn;
 import com.beaglesecurity.client.helper.HttpUtil;
 import com.beaglesecurity.entities.Application;
 import com.beaglesecurity.entities.ApplicationType;
+import com.beaglesecurity.entities.PluginType;
 import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
+import com.beaglesecurity.entities.Signature;
 import com.beaglesecurity.entities.SignatureStatus;
+import com.beaglesecurity.entities.SignatureType;
 import com.beaglesecurity.execptions.GeneralAPIException;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 import com.beaglesecurity.execptions.InvalidProjectKeyException;
@@ -533,5 +538,98 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 			handleCommonExceptions(ret.getCode());
 		}
 		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getSignature(java.lang.String)
+	 */
+	@Override
+	public Signature getSignature(String applicationToken) {
+		HttpReturn ret = HttpUtil.deleteRequest(baseUrl + "applications/signature?application_token=" + applicationToken, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to get signature.");
+		}
+		SignatureResult result = null;
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			result = convertJsonToObject(ret.getResultJson(), SignatureResult.class);
+			if (result == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			Signature signature = new Signature();
+			signature.setApiSignature(result.getApiSignature());
+			signature.setDnsSignature(result.getDnsSignature());
+			signature.setFileSignature(result.getFileSignature());
+			signature.setStatus(result.getStatus());
+			signature.setUrl(result.getUrl());
+			return signature;			
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":
+					throw new InvalidApplicationTokenException("Invalid application token.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#verifySignature(java.lang.String, com.beaglesecurity.entities.SignatureType, com.beaglesecurity.entities.PluginType)
+	 */
+	@Override
+	public boolean verifySignature(String applicationToken, SignatureType signatureType, PluginType pluginType) {		
+		if (applicationToken == null || applicationToken.trim().length() == 0) {
+			throw new ValidationException("Invalid application token.");
+		}
+		if (signatureType == null) {
+			throw new ValidationException("Invalid signature type.");
+		}
+		if (signatureType == SignatureType.Plugin && pluginType == null) {
+			throw new ValidationException("Invalid plugin type.");
+		}
+		
+		SignatureVerify verify = new SignatureVerify();
+		verify.setApplicationToken(applicationToken);
+		verify.setSignatureType(signatureType);
+		verify.setPluginType(pluginType);
+		HttpReturn ret = HttpUtil.postRequest(baseUrl + "applications/signature?application_token=" + applicationToken, verify, token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to get signature.");
+		}		
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			return true;					
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				case "NOT_AUTHORIZED":					
+					throw new UnAuthorizedException("You are not authorized.");
+				case "FAILED":
+					throw new InvalidApplicationTokenException("Invalid application token.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return false;
 	}
 }
