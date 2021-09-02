@@ -44,6 +44,7 @@ Maven:
 ## Basic Usage
 
 Once you have the dependencies resolved, you can start using the sdk by creating BeagleSecurityClient to communicate with Beagle Security platform.
+The below code gets all the project available under a user.
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -60,7 +61,7 @@ public static void main(String[] args) throws IOException {
 
 ### Starting a test
 
-The below code snippet shows how to trigger a test
+The below code snippet trigger a new test
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -81,7 +82,7 @@ public static void main(String[] args) throws IOException {
 
 ### Getting status of a running test
 
-The below code snippet shows how to get the status of a running test
+The below code snippet gets the status of a running test
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -93,7 +94,8 @@ public static void main(String[] args) throws IOException {
 			.build();
 	// The application token will be available in the application settings page
 	String applicationToken = "6mkakhiyhxlonol42v87e9cs2gbyarpg";
-	// This will be available from the start test API or getTestSessions() or getTestRunningSessions() APIs
+	// This will be available from the start test API or getTestSessions() or 
+	// getTestRunningSessions() APIs
 	String resultToken = "wagywiof6m76j1jwgzt8wgjtkuhiuxnv";
 	// Start a test
 	TestStatus testStatus = client.getTestStatus(applicationToken, resultToken);
@@ -104,7 +106,7 @@ public static void main(String[] args) throws IOException {
 
 ### Getting test result json
 
-The result json string contains the vulnerabilities detected
+The below code snippet gets the test result once testing is completed
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -116,7 +118,8 @@ public static void main(String[] args) throws IOException {
 			.build();
 	// The application token will be available in the application settings page
 	String applicationToken = "6mkakhiyhxlonol42v87e9cs2gbyarpg";
-	// This will be available from the start test API or getTestSessions() or getTestRunningSessions() APIs
+	// This will be available from the start test API or getTestSessions() or 
+	// getTestRunningSessions() APIs
 	String resultToken = "wagywiof6m76j1jwgzt8wgjtkuhiuxnv";
 	// Gets the test result
 	String jsonResult = client.getTestResultJson(applicationToken, resultToken);
