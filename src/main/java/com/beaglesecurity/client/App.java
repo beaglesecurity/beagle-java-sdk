@@ -12,7 +12,7 @@ public class App {
 				BeagleSecurityClientBuilder.instance()
 				.withAPIToken("j69czobljo3ozp2knze4v1554eekp3r9")
 				.build();
-		List<ProjectWithApplication> projects = client.getAllProjectsWithApplications();
+		List<ProjectWithApplication> projects = client.getAllProjects();
 	}
 
 }

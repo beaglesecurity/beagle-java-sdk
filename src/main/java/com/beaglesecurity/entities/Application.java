@@ -6,6 +6,7 @@ public class Application {
 	private String applicationToken;
 	private String applicationType;
 	private SignatureStatus signatureStatus;
+	private String hostingType;
 	public String getName() {
 		return name;
 	}
@@ -35,5 +36,11 @@ public class Application {
 	}
 	public void setSignatureStatus(SignatureStatus signatureStatus) {
 		this.signatureStatus = signatureStatus;
+	}
+	public String getHostingType() {
+		return hostingType;
+	}
+	public void setHostingType(String hostingType) {
+		this.hostingType = hostingType;
 	}
 }

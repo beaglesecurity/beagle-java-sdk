@@ -30,7 +30,7 @@ import com.beaglesecurity.api.results.ApplicationResult;
 import com.beaglesecurity.api.results.ApplicationsResult;
 import com.beaglesecurity.api.results.CreateApplicationResult;
 import com.beaglesecurity.api.results.CreateProjectResult;
-import com.beaglesecurity.api.results.ProjectsResult;
+import com.beaglesecurity.api.results.ProjectWithTeamResult;
 import com.beaglesecurity.api.results.ProjectsWithApplicationResult;
 import com.beaglesecurity.api.results.SignatureResult;
 import com.beaglesecurity.api.results.StartTestResult;
@@ -45,6 +45,7 @@ import com.beaglesecurity.entities.ApplicationType;
 import com.beaglesecurity.entities.PluginType;
 import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
+import com.beaglesecurity.entities.ProjectWithTeam;
 import com.beaglesecurity.entities.Signature;
 import com.beaglesecurity.entities.SignatureStatus;
 import com.beaglesecurity.entities.SignatureType;
@@ -54,6 +55,7 @@ import com.beaglesecurity.entities.TestSession;
 import com.beaglesecurity.entities.TestStatus;
 import com.beaglesecurity.execptions.GeneralAPIException;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
+import com.beaglesecurity.execptions.InvalidPluginTypeException;
 import com.beaglesecurity.execptions.InvalidProjectKeyException;
 import com.beaglesecurity.execptions.InvalidSessionException;
 import com.beaglesecurity.execptions.InvalidUrlException;
@@ -74,46 +76,11 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.beaglesecurity.client.BeagleSecurityClient#getAllProjects()
-	 */
-	@Override
-	public List<Project> getAllProjects() { 
-		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects", token);
-		if (ret == null) {
-			throw new GeneralAPIException("Failed to retrieve projects.");
-		}
-		ProjectsResult result = null;		
-		if (ret.getCode() == HttpStatus.SC_OK) {
-			result = convertJsonToObject(ret.getResultJson(), ProjectsResult.class);
-			if (result == null) {
-				throw new GeneralAPIException("Failed to retrieve json data.");
-			}
-			return result.getProjects();
-		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
-			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
-			if (apiResult == null) {
-				throw new GeneralAPIException("Failed to retrieve json data.");
-			}
-			switch (apiResult.getCode()) {
-				case "PLAN_NOT_SUPPORTED":
-					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
-				case "INVALID_SESSION":					
-					throw new InvalidSessionException("The given token is invalid.");
-				default:
-					throw new GeneralAPIException("Some error has occured.");
-			}
-		} else {
-			handleCommonExceptions(ret.getCode());
-		}
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see com.beaglesecurity.client.BeagleSecurityClient#getAllProjectsWithApplications()
 	 */
 	@Override
-	public List<ProjectWithApplication> getAllProjectsWithApplications() { 
-		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects?include_applications=true", token);
+	public List<ProjectWithApplication> getAllProjects() { 
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects", token);
 		if (ret == null) {
 			throw new GeneralAPIException("Failed to retrieve projects.");
 		}
@@ -144,17 +111,68 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 	}
 	
 	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getAllProjectWithTeams()
+	 */
+	@Override
+	public ProjectWithTeam getAllProjectWithTeams() { 
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "projects?include_team=true", token);
+		if (ret == null) {
+			throw new GeneralAPIException("Failed to retrieve projects with team.");
+		}
+		ProjectWithTeamResult apiResult = null;		
+		if (ret.getCode() == HttpStatus.SC_OK) {
+			apiResult = convertJsonToObject(ret.getResultJson(), ProjectWithTeamResult.class);
+			if (apiResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			ProjectWithTeam result = new ProjectWithTeam();
+			result.setMyProjects(apiResult.getMyProjects());
+			result.setTeamProjects(apiResult.getTeamProjects());
+			return result;
+		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
+			APIResult apiErrorResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
+			if (apiErrorResult == null) {
+				throw new GeneralAPIException("Failed to retrieve json data.");
+			}
+			switch (apiErrorResult.getCode()) {
+				case "PLAN_NOT_SUPPORTED":
+					throw new PlanNotSupportException("Your current plan is not supported API calls.");					
+				case "INVALID_SESSION":					
+					throw new InvalidSessionException("The given token is invalid.");
+				default:
+					throw new GeneralAPIException("Some error has occured.");
+			}
+		} else {
+			handleCommonExceptions(ret.getCode());
+		}
+		return null;
+	}
+	
+	/* (non-Javadoc)
 	 * @see com.beaglesecurity.client.BeagleSecurityClient#createProject(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public Project createProject(String projectName, String description) {
+		return createProject(projectName, description, null);
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#createProject(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Project createProject(String projectName, String description, String teamId) {
 		if (projectName == null || projectName.trim().length() == 0) {
 			throw new ValidationException("Invalid project name.");
 		}
 		CreateProject proj = new CreateProject();
 		proj.setName(projectName);
 		proj.setDescription(description);
-		HttpReturn ret = HttpUtil.postRequest(baseUrl + "projects", proj, token);
+		HttpReturn ret = null;
+		if (teamId == null) {
+			ret = HttpUtil.postRequest(baseUrl + "projects", proj, token);
+		} else {
+			ret = HttpUtil.postRequest(baseUrl + "projects?teamid=" + teamId, proj, token);
+		}
 		CreateProjectResult result = null;
 		if (ret.getCode() == HttpStatus.SC_CREATED) {
 			result = convertJsonToObject(ret.getResultJson(), CreateProjectResult.class);
@@ -422,6 +440,10 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new UnAuthorizedException("You are not authorized.");
 				case "INVALID_URL":					
 					throw new InvalidUrlException("Invalid url provided.");
+				case "URL_ALREADY_ADDED":
+					throw new UrlAlreadyAddedException("Url is already added in another application.");
+				case "INVALID_PROJECT_KEY":
+					throw new InvalidProjectKeyException("Invalid project key provided.");			
 				default:
 					throw new GeneralAPIException("Some error has occured.");
 			}
@@ -635,6 +657,8 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new UnAuthorizedException("You are not authorized.");
 				case "FAILED":
 					throw new InvalidApplicationTokenException("Invalid application token.");
+				case "INVALID_PLUGIN_TYPE":
+					throw new InvalidPluginTypeException("Invalid plugin type.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
 			}
@@ -857,7 +881,21 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 	 */
 	@Override
 	public List<TestRunningSession> getTestRunningSessions() {
-		HttpReturn ret = HttpUtil.getRequest(baseUrl + "test/runningsessions", token);
+		return getTeamTestRunningSessions(null);
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTeamTestRunningSessions(java.lang.String)
+	 */
+	@Override
+	public List<TestRunningSession> getTeamTestRunningSessions(String teamId) {
+		HttpReturn ret = null;		
+		if (teamId == null) {
+			ret = HttpUtil.getRequest(baseUrl + "test/runningsessions", token);
+		} else {
+			ret = HttpUtil.getRequest(baseUrl + "test/runningsessions?teamid=" + teamId, token);
+		}
 		if (ret == null) {
 			throw new GeneralAPIException("Failed to retrieve running sessions.");
 		}

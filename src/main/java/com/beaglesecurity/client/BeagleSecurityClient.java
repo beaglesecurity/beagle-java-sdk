@@ -21,6 +21,7 @@ import com.beaglesecurity.entities.ApplicationType;
 import com.beaglesecurity.entities.PluginType;
 import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
+import com.beaglesecurity.entities.ProjectWithTeam;
 import com.beaglesecurity.entities.Signature;
 import com.beaglesecurity.entities.SignatureType;
 import com.beaglesecurity.entities.StartTest;
@@ -30,27 +31,6 @@ import com.beaglesecurity.entities.TestStatus;
 import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 
 public interface BeagleSecurityClient {
-
-	/**
-     * <p>
-     * Returns all the projects for a user without application in it
-     * </p>
-     * 
-     * @return List<Project> list of project
-     * @throws GeneralAPIException
-     *         General exceptions.
-     * @throws PlanNotSupportException
-     *         The user plan is not supported
-     * @throws InvalidSessionException
-     * 		   Given token is not valid
-     * @throws UnAuthorizedException
-     * 		   No permission to view the application
-     * @throws ForbiddenException
-     *		   Forbidden
-     * @throws InternalServerErrorException
-     * 		   Internal server error
-     */
-	List<Project> getAllProjects();
 
 	/**
      * <p>
@@ -71,7 +51,28 @@ public interface BeagleSecurityClient {
      * @throws InternalServerErrorException
      * 		   Internal server error
      */
-	List<ProjectWithApplication> getAllProjectsWithApplications();
+	List<ProjectWithApplication> getAllProjects();
+	
+	/**
+     * <p>
+     * Returns all the projects and team projects
+     * </p>
+     * 
+     * @return ProjectWithTeam all the projects and team projects
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	ProjectWithTeam getAllProjectWithTeams();
 	
 	/**
      * <p>
@@ -101,6 +102,36 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	Project createProject(String projectName, String description);
+	
+	/**
+     * <p>
+     * Create a new project in a team and return it
+     * </p>
+     * 
+     * @param projectName Name of project
+     * @param description project description
+     * @param teamId team id to create the project
+     * @return Project created project
+     * @throws ValidationException
+     * 		   Parameter validation failure exception
+     * @throws GeneralAPIException
+     *         General exceptions.
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws InvalidUrlException
+     * 		   Given url is not valid
+     * @throws ProjectAlreadyExistsException
+     * 		   The given project already exists
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	Project createProject(String projectName, String description, String teamId);
 	
 	/**
      * <p>
@@ -483,4 +514,26 @@ public interface BeagleSecurityClient {
      * 		   Internal server error
      */
 	List<TestRunningSession> getTestRunningSessions();
+
+	/**
+     * <p>
+     * Gets all running sessions under a team
+     * </p>
+     * 
+     * @param teamId team id to find running session
+     * @return List<TestRunningSession> running sessions
+     * @throws GeneralAPIException
+     *         General exceptions
+     * @throws PlanNotSupportException
+     *         The user plan is not supported
+     * @throws InvalidSessionException
+     * 		   Given token is not valid
+     * @throws UnAuthorizedException
+     * 		   No permission to view the application
+     * @throws ForbiddenException
+     *		   Forbidden
+     * @throws InternalServerErrorException
+     * 		   Internal server error
+     */
+	List<TestRunningSession> getTeamTestRunningSessions(String teamId);
 }
