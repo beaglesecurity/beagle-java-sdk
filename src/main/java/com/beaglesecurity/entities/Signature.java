@@ -1,9 +1,10 @@
-package com.beaglesecurity.entities;
+/**
+ * Copyright (c) Beagle Cyber Innovations Pvt. Ltd. All rights reserved.
+ * Licensed under the MIT License. See LICENSE file in the project root for
+ * license information.
+ */
 
-import com.beaglesecurity.entities.APISignature;
-import com.beaglesecurity.entities.DnsSignature;
-import com.beaglesecurity.entities.FileSignature;
-import com.beaglesecurity.entities.SignatureStatus;
+package com.beaglesecurity.entities;
 
 public class Signature {
 	private SignatureStatus status;

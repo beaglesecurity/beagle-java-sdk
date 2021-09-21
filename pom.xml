@@ -14,15 +14,26 @@
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
 
 	<scm>
+		<connection>scm:git:git://github.com/beaglesecurity/beagle-java-sdk.git</connection>
+		<developerConnection>scm:git:ssh://github.com:beaglesecurity/beagle-java-sdk.git</developerConnection>
 		<url>https://github.com/beaglesecurity/beagle-java-sdk</url>
 	</scm>
+
+	<developers>
+		<developer>
+			<name>Prathap</name>
+			<email>prathap@beaglesecurity.com</email>
+			<organization>Beagle Cyber Innovations Pvt. Ltd.</organization>
+			<organizationUrl>https://beaglesecurity.com</organizationUrl>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,11 +44,11 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.13</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			 <version>2.12.5</version>
+			<version>2.12.5</version>
 		</dependency>
 	</dependencies>
 </project>
