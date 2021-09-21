@@ -55,7 +55,7 @@ public static void main(String[] args) throws IOException {
 			.withAPIToken("j69czobljo3ozp2knze4v1554eekp3r9")
 			.build();
 	// Gets all the projects and its applications under a user 
-	List<ProjectWithApplication> projects = client.getAllProjectsWithApplications();
+	List<ProjectWithApplication> projects = client.getAllProjects();
 }
 ```
 
@@ -128,5 +128,5 @@ public static void main(String[] args) throws IOException {
 
 ## License
 
-This library is licensed under the Apache 2.0 License.
+This library is Licensed under the MIT License.
 
