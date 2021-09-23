@@ -62,10 +62,10 @@ import com.beaglesecurity.execptions.ValidationException;
 public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implements BeagleSecurityClient{
 
 	/**
-	 * @param token
+	 * @param userToken is the token generated from beagle security settings for a user
 	 */
-	public BeagleSecurityClientImpl(String token) {
-		this.token = token;
+	public BeagleSecurityClientImpl(String userToken) {
+		this.token = userToken;
 	}
 	
 	/* (non-Javadoc)
