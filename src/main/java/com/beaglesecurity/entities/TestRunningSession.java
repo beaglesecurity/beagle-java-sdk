@@ -6,15 +6,12 @@
 
 package com.beaglesecurity.entities;
 
-import java.util.UUID;
-
 public class TestRunningSession {
 	private String title;
     private String url;
     private String applicationToken;
 	private String resultToken;
 	private Long startTime;
-	private UUID sessionKey;
 	public String getTitle() {
 		return title;
 	}
@@ -44,11 +41,5 @@ public class TestRunningSession {
 	}
 	public void setStartTime(Long startTime) {
 		this.startTime = startTime;
-	}
-	public UUID getSessionKey() {
-		return sessionKey;
-	}
-	public void setSessionKey(UUID sessionKey) {
-		this.sessionKey = sessionKey;
 	}
 }

@@ -40,7 +40,6 @@ import com.beaglesecurity.entities.Project;
 import com.beaglesecurity.entities.ProjectWithApplication;
 import com.beaglesecurity.entities.ProjectWithTeam;
 import com.beaglesecurity.entities.Signature;
-import com.beaglesecurity.entities.SignatureStatus;
 import com.beaglesecurity.entities.SignatureType;
 import com.beaglesecurity.entities.StartTest;
 import com.beaglesecurity.entities.TestRunningSession;
@@ -409,15 +408,12 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 			}
 			Application application = new Application();
 			application.setApplicationToken(result.getApplicationToken());
-			String appType = result.getType() == null? "WEB" : result.getType().name();
+			String appType = result.getApplicationType() == null? "WEB" : result.getApplicationType().name();
 			application.setApplicationType(appType);
 			application.setName(result.getName());
-			SignatureStatus sigStatus = SignatureStatus.NotVerified;
-			if (Boolean.TRUE.equals(result.getSignatureVerified())) {
-				sigStatus = SignatureStatus.Verified;
-			}
-			application.setSignatureStatus(sigStatus);
+			application.setSignatureStatus(result.getSignatureStatus());
 			application.setUrl(result.getUrl());
+			application.setHostingType(result.getHostingType());
 			return application;
 			
 		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
@@ -477,15 +473,12 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 			}
 			Application application = new Application();
 			application.setApplicationToken(result.getApplicationToken());
-			String appType = result.getType() == null? "WEB" : result.getType().name();
+			String appType = result.getApplicationType() == null? "WEB" : result.getApplicationType().name();
 			application.setApplicationType(appType);
 			application.setName(result.getName());
-			SignatureStatus sigStatus = SignatureStatus.NotVerified;
-			if (Boolean.TRUE.equals(result.getSignatureVerified())) {
-				sigStatus = SignatureStatus.Verified;
-			}
-			application.setSignatureStatus(sigStatus);
+			application.setSignatureStatus(result.getSignatureStatus());
 			application.setUrl(result.getUrl());
+			application.setHostingType(result.getHostingType());
 			return application;
 			
 		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
@@ -534,15 +527,12 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 			}
 			Application application = new Application();
 			application.setApplicationToken(result.getApplicationToken());
-			String appType = result.getType() == null? "WEB" : result.getType().name();
+			String appType = result.getApplicationType() == null? "WEB" : result.getApplicationType().name();
 			application.setApplicationType(appType);
 			application.setName(result.getName());
-			SignatureStatus sigStatus = SignatureStatus.NotVerified;
-			if (Boolean.TRUE.equals(result.getSignatureVerified())) {
-				sigStatus = SignatureStatus.Verified;
-			}
-			application.setSignatureStatus(sigStatus);
+			application.setSignatureStatus(result.getSignatureStatus());
 			application.setUrl(result.getUrl());
+			application.setHostingType(result.getHostingType());
 			return application;			
 		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
 			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);
@@ -880,7 +870,6 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		return getTeamTestRunningSessions(null);
 	}
 	
-
 	/* (non-Javadoc)
 	 * @see com.beaglesecurity.client.BeagleSecurityClient#getTeamTestRunningSessions(java.lang.String)
 	 */
