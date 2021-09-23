@@ -1,0 +1,72 @@
+<!-- Copyright (c) Beagle Cyber Innovations Pvt. Ltd. All rights reserved. --><!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
+ 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.beaglesecurity</groupId>
+	<artifactId>beagle-java-sdk</artifactId>
+	<version>1.0</version>
+	<packaging>jar</packaging>
+
+	<name>beagle-java-sdk</name>
+	<description>The Beagle Security SDK for Java provides Java APIs for building software for penetration testing using Beagle Security platform.</description>
+	<url>https://beaglesecurity.com/beagle-sdk</url>
+
+	<licenses>
+		<license>
+			<name>The MIT License (MIT)</name>
+			<url>http://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git://github.com/beaglesecurity/beagle-java-sdk.git</connection>
+		<developerConnection>scm:git:ssh://github.com:beaglesecurity/beagle-java-sdk.git</developerConnection>
+		<url>https://github.com/beaglesecurity/beagle-java-sdk</url>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Prathap</name>
+			<email>prathap@beaglesecurity.com</email>
+			<organization>Beagle Cyber Innovations Pvt. Ltd.</organization>
+			<organizationUrl>https://beaglesecurity.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jre.version>1.7</jre.version>
+		<apache.httpclient.version>4.5.13</apache.httpclient.version>
+		<json.jackson.version>2.12.5</json.jackson.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${apache.httpclient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${json.jackson.version}</version>
+		</dependency>
+	</dependencies>
+	 <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <source>${jre.version}</source>
+                    <target>${jre.version}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
