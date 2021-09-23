@@ -713,9 +713,9 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 				throw new GeneralAPIException("Failed to retrieve json data.");
 			}
 			StartTest retResult = new StartTest();
-			retResult.setResultToken(result.getResult_token());
-			retResult.setResultUrl(result.getResult_url());
-			retResult.setStatusUrl(result.getStatus_url());
+			retResult.setResultToken(result.getResultToken());
+			retResult.setResultUrl(result.getResultUrl());
+			retResult.setStatusUrl(result.getStatusUrl());
 			return retResult;
 		} else if (ret.getCode() == HttpStatus.SC_BAD_REQUEST) {
 			APIResult apiResult = convertJsonToObject(ret.getResultJson(), APIResult.class);

@@ -21,7 +21,6 @@ import com.beaglesecurity.entities.StartTest;
 import com.beaglesecurity.entities.TestRunningSession;
 import com.beaglesecurity.entities.TestSession;
 import com.beaglesecurity.entities.TestStatus;
-import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 
 public interface BeagleSecurityClient {
 

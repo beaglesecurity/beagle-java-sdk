@@ -8,9 +8,9 @@ package com.beaglesecurity.api.results;
 
 public class StartTestResult {
 	private String code;
-	private String status_url;
-	private String result_url;
-	private String result_token;
+	private String statusUrl;
+	private String resultUrl;
+	private String resultToken;
 	private String message;
 	public String getCode() {
 		return code;
@@ -18,23 +18,23 @@ public class StartTestResult {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	public String getStatus_url() {
-		return status_url;
+	public String getStatusUrl() {
+		return statusUrl;
 	}
-	public void setStatus_url(String status_url) {
-		this.status_url = status_url;
+	public void setStatusUrl(String statusUrl) {
+		this.statusUrl = statusUrl;
 	}
-	public String getResult_url() {
-		return result_url;
+	public String getResultUrl() {
+		return resultUrl;
 	}
-	public void setResult_url(String result_url) {
-		this.result_url = result_url;
+	public void setResultUrl(String resultUrl) {
+		this.resultUrl = resultUrl;
 	}
-	public String getResult_token() {
-		return result_token;
+	public String getResultToken() {
+		return resultToken;
 	}
-	public void setResult_token(String result_token) {
-		this.result_token = result_token;
+	public void setResultToken(String resultToken) {
+		this.resultToken = resultToken;
 	}
 	public String getMessage() {
 		return message;
