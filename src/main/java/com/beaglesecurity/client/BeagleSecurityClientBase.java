@@ -15,7 +15,7 @@ import com.beaglesecurity.execptions.UnAuthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class BeagleSecurityClientBase {
-	protected static final String baseUrl = "https://api.dev.beaglesecure.com/rest/v2/";
+	protected static final String baseUrl = "https://api.beaglesecurity.com/rest/v2/";	
 	protected String token;	
 	/**
      * <p>
