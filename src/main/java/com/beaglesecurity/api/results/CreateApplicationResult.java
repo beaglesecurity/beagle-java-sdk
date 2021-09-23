@@ -24,6 +24,8 @@ public class CreateApplicationResult {
 	
 	private ApplicationType type;
 	
+	private String hostingType;
+	
 	private String code;
 	
 	private String message;
@@ -90,5 +92,13 @@ public class CreateApplicationResult {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public String getHostingType() {
+		return hostingType;
+	}
+
+	public void setHostingType(String hostingType) {
+		this.hostingType = hostingType;
 	}
 }

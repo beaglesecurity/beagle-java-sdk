@@ -57,6 +57,7 @@ import com.beaglesecurity.execptions.ProjectAlreadyExistsException;
 import com.beaglesecurity.execptions.TestInProgressException;
 import com.beaglesecurity.execptions.UnAuthorizedException;
 import com.beaglesecurity.execptions.UrlAlreadyAddedException;
+import com.beaglesecurity.execptions.UrlVerifiedException;
 import com.beaglesecurity.execptions.ValidationException;
 
 public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implements BeagleSecurityClient{
@@ -505,6 +506,8 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new InvalidUrlException("Invalid url provided.");
 				case "URL_ALREADY_ADDED":
 					throw new UrlAlreadyAddedException("Url is already added in another application.");
+				case "URL_VERIFIED":
+					throw new UrlVerifiedException("Url is verified. Unable to modify url.");
 				default:
 					throw new GeneralAPIException("Some error has occured.");
 			}

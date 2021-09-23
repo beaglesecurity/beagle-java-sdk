@@ -33,8 +33,9 @@ public class HttpUtil {
 			
 			httpClient = HttpClients.createDefault();
 			httpPost = new HttpPost(url);
-			StringEntity entity = new StringEntity(json);
+			StringEntity entity = new StringEntity(json, "UTF-8");
 			entity.setContentType("application/json");
+			entity.setContentEncoding("UTF-8");
 			httpPost.setEntity(entity);
 			httpPost.setHeader("Authorization", "Bearer " + token);	
 			HttpResponse response = httpClient.execute(httpPost);
@@ -71,8 +72,9 @@ public class HttpUtil {
 			
 			httpClient = HttpClients.createDefault();
 			httpPut = new HttpPut(url);
-			StringEntity entity = new StringEntity(json);
+			StringEntity entity = new StringEntity(json, "UTF-8");
 			entity.setContentType("application/json");
+			entity.setContentEncoding("UTF-8");
 			httpPut.setEntity(entity);
 			httpPut.setHeader("Authorization", "Bearer " + token);	
 			HttpResponse response = httpClient.execute(httpPut);
