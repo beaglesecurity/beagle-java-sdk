@@ -62,7 +62,7 @@
 		<repository>
 			<id>github</id>
 			<name>Beagle Security SDK for Java</name>
-			<url>https://github.com/beaglesecurity/beagle-java-sdk</url>
+			<url>https://maven.pkg.github.com/beaglesecurity/beagle-java-sdk</url>
 		</repository>
 	</distributionManagement>
 	
