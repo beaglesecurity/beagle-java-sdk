@@ -9,6 +9,7 @@ package com.beaglesecurity.api.results;
 import java.util.UUID;
 
 import com.beaglesecurity.entities.ApplicationType;
+import com.beaglesecurity.entities.SignatureStatus;
 
 public class CreateApplicationResult {
 	
@@ -20,9 +21,9 @@ public class CreateApplicationResult {
 	
 	private String applicationToken;
 	
-	private Boolean signatureVerified;
+	private SignatureStatus signatureStatus;
 	
-	private ApplicationType type;
+	private ApplicationType applicationType;
 	
 	private String hostingType;
 	
@@ -62,20 +63,20 @@ public class CreateApplicationResult {
 		this.applicationToken = applicationToken;
 	}
 
-	public Boolean getSignatureVerified() {
-		return signatureVerified;
+	public SignatureStatus getSignatureStatus() {
+		return signatureStatus;
 	}
 
-	public void setSignatureVerified(Boolean signatureVerified) {
-		this.signatureVerified = signatureVerified;
+	public void setSignatureStatus(SignatureStatus signatureStatus) {
+		this.signatureStatus = signatureStatus;
 	}
 
-	public ApplicationType getType() {
-		return type;
+	public ApplicationType getApplicationType() {
+		return applicationType;
 	}
 
-	public void setType(ApplicationType type) {
-		this.type = type;
+	public void setApplicationType(ApplicationType applicationType) {
+		this.applicationType = applicationType;
 	}
 
 	public String getCode() {

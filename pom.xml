@@ -1,5 +1,6 @@
-<!-- Copyright (c) Beagle Cyber Innovations Pvt. Ltd. All rights reserved. --><!-- Licensed under the MIT license. See LICENSE file in the project root for full license information. -->
- 
+<!-- Copyright (c) Beagle Cyber Innovations Pvt. Ltd. All rights reserved. --><!-- Licensed under the MIT license. See LICENSE file in the project root 
+	for full license information. -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -56,17 +57,26 @@
 			<version>${json.jackson.version}</version>
 		</dependency>
 	</dependencies>
-	 <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <source>${jre.version}</source>
-                    <target>${jre.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+	
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>Beagle Security SDK for Java</name>
+			<url>https://github.com/beaglesecurity/beagle-java-sdk</url>
+		</repository>
+	</distributionManagement>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.0</version>
+				<configuration>
+					<source>${jre.version}</source>
+					<target>${jre.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

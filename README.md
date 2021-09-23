@@ -5,7 +5,7 @@
   <h3 align="center">Developer guide for Beagle Security SDK</h3>
   
   <p align="center">
-    This library can be used to automate penetration testing of your website using Beagle Security platform
+    This library can be used to automate penetration testing of your website using Beagle Security
     <br />
     <br />
   </p>
@@ -20,7 +20,8 @@
     
 ## Getting Started
 
-Beagle Security is a penetration testing platform for testing websites and REST APIs. It has a <a href="https://beaglesecurity.com">website</a> for doing the penetration testing activities and monitor via dash boards. In addition to this, the platform supports automating the penetration testing process. There are two mechanism for doing automation.
+Beagle Security is a web application & API penetration testing tool that helps you to identify vulnerabilities on your website before hackers exploit them. There are two mechanisms available for automating the process. 
+
 - Using REST APIs
 - Using SDK
 
@@ -29,8 +30,8 @@ You can find the complete set of REST APIs in the Beagle Security <a href="https
 
 ## Basic Usage
 
-Once you have the dependencies resolved, you can start using the sdk by creating BeagleSecurityClient to communicate with Beagle Security platform.
-The below code gets all the project available under a user.
+Once you have resolved the dependencies, you can start using the SDK by creating BeagleSecurityClient to communicate with the Beagle Security platform. The below code will fetch all the projects available under a user. 
+
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -47,7 +48,7 @@ public static void main(String[] args) throws IOException {
 
 ### Starting a test
 
-The below code snippet trigger a new test
+The below code snippet can be used to trigger a new penetration test.
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -68,7 +69,7 @@ public static void main(String[] args) throws IOException {
 
 ### Getting status of a running test
 
-The below code snippet gets the status of a running test
+The below code snippet can be used to get the status of a running test.
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -92,7 +93,7 @@ public static void main(String[] args) throws IOException {
 
 ### Getting test result json
 
-The below code snippet gets the test result once testing is completed
+The below code snippet can be used to get the test result once a penetration test is completed. 
 
 ```java
 public static void main(String[] args) throws IOException {
