@@ -11,6 +11,8 @@
   </p>
  </p>
  
+ [![Maven Central](https://img.shields.io/maven-central/v/com.beaglesecurity/beagle-java-sdk.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.beaglesecurity%22%20AND%20a:%22beagle-java-sdk%22)
+ 
 ## Table of Contents
 
 - [Getting Started](#getting-started)
