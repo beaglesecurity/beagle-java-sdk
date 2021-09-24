@@ -55,7 +55,7 @@ public abstract class BeagleSecurityClientBase {
 		if (errorCode == HttpStatus.SC_FORBIDDEN) {
 			throw new ForbiddenException("Forbidden.");
 		} else if (errorCode == HttpStatus.SC_UNAUTHORIZED) {
-			throw new UnAuthorizedException("Un authorized.");
+			throw new UnAuthorizedException("Unauthorized.");
 		} else if (errorCode == HttpStatus.SC_INTERNAL_SERVER_ERROR) {
 			throw new InternalServerErrorException("Internal server error.");
 		} else {
