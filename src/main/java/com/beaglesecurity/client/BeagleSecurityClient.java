@@ -21,7 +21,6 @@ import com.beaglesecurity.entities.StartTest;
 import com.beaglesecurity.entities.TestRunningSession;
 import com.beaglesecurity.entities.TestSession;
 import com.beaglesecurity.entities.TestStatus;
-import com.beaglesecurity.execptions.InvalidApplicationTokenException;
 
 public interface BeagleSecurityClient {
 
@@ -30,18 +29,18 @@ public interface BeagleSecurityClient {
      * Returns all the projects and applications for a particular user
      * </p>
      * 
-     * @return List<ProjectWithApplication> list of project
-     * @throws GeneralAPIException
+     * @return list of project
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	List<ProjectWithApplication> getAllProjects();
@@ -51,18 +50,18 @@ public interface BeagleSecurityClient {
      * Returns all the projects and team projects
      * </p>
      * 
-     * @return ProjectWithTeam all the projects and team projects
-     * @throws GeneralAPIException
+     * @return all the projects and team projects
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	ProjectWithTeam getAllProjectWithTeams();
@@ -74,24 +73,24 @@ public interface BeagleSecurityClient {
      * 
      * @param projectName Name of project
      * @param description project description
-     * @return Project created project
-     * @throws ValidationException
+     * @return created project
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws ProjectAlreadyExistsException
+     * @throws com.beaglesecurity.execptions.ProjectAlreadyExistsException
      * 		   The given project already exists
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Project createProject(String projectName, String description);
@@ -104,24 +103,24 @@ public interface BeagleSecurityClient {
      * @param projectName Name of project
      * @param description project description
      * @param teamId team id to create the project
-     * @return Project created project
-     * @throws ValidationException
+     * @return created project
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws ProjectAlreadyExistsException
+     * @throws com.beaglesecurity.execptions.ProjectAlreadyExistsException
      * 		   The given project already exists
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Project createProject(String projectName, String description, String teamId);
@@ -134,26 +133,26 @@ public interface BeagleSecurityClient {
      * @param projectKey project key to modify
      * @param projectName Name of project
      * @param description project description
-     * @return Project modified project
-     * @throws ValidationException
+     * @return modified project
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws ProjectAlreadyExistsException
+     * @throws com.beaglesecurity.execptions.ProjectAlreadyExistsException
      * 		   The given project already exists
-     * @throws InvalidProjectKeyException
+     * @throws com.beaglesecurity.execptions.InvalidProjectKeyException
      * 		   The given project key is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Project modifyProject(UUID projectKey, String projectName, String description);	
@@ -164,24 +163,24 @@ public interface BeagleSecurityClient {
      * </p>
      * 
      * @param projectKey project key to delete
-     * @return Project deleted project
-     * @throws ValidationException
+     * @return deleted project
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws InvalidProjectKeyException
+     * @throws com.beaglesecurity.execptions.InvalidProjectKeyException
      * 		   The given project key is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Project deleteProject(UUID projectKey);
@@ -191,21 +190,21 @@ public interface BeagleSecurityClient {
      * Returns application object corresponds to the given application token.
      * </p>
      * 
-     * @param applicationToken
-     * @return Application object
-     * @throws GeneralAPIException
+     * @param applicationToken is the unique token of application
+     * @return application object
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidApplicationTokenException
+     * @throws com.beaglesecurity.execptions.InvalidApplicationTokenException
      * 		   Given token is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Application getApplication(String applicationToken);
@@ -216,20 +215,20 @@ public interface BeagleSecurityClient {
      * </p>
      * 
      * @param  projectKey project key to retrieve applications
-     * @return List<Application> list of applications under project
-     * @throws GeneralAPIException
+     * @return list of applications under project
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidProjectKeyException
+     * @throws com.beaglesecurity.execptions.InvalidProjectKeyException
      * 		   Given project key is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	List<Application> getApplications(UUID projectKey);
@@ -243,22 +242,22 @@ public interface BeagleSecurityClient {
      * @param url website url for penetration testing
      * @param projectKey project key under the application needs to add
      * @param type application type such as WEB or API
-     * @return Application created application
-     * @throws ValidationException
+     * @return created application
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Application createApplication(String applicationName, String url, UUID projectKey, ApplicationType type);
@@ -271,24 +270,24 @@ public interface BeagleSecurityClient {
      * @param applicationToken token of the application
      * @param applicationName Name of application to modify
      * @param url website url to modify. If domain is verified, then unable to modify url
-     * @return Application modified application
-     * @throws ValidationException
+     * @return modified application
+     * @throws com.beaglesecurity.execptions.ValidationException
      * 		   Parameter validation failure exception
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidUrlException
+     * @throws com.beaglesecurity.execptions.InvalidUrlException
      * 		   Given url is not valid
-     * @throws UrlAlreadyAddedException
+     * @throws com.beaglesecurity.execptions.UrlAlreadyAddedException
      * 		   The url is added in another application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Application modifyApplication(String applicationToken, String applicationName, String url);
@@ -298,23 +297,23 @@ public interface BeagleSecurityClient {
      * Delete an application using application token
      * </p>
      * 
-     * @param applicationToken
-     * @return Application object
-     * @throws GeneralAPIException
+     * @param applicationToken is the unique token of application
+     * @return application object
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidApplicationTokenException
+     * @throws com.beaglesecurity.execptions.InvalidApplicationTokenException
      * 		   Given token is not valid
-     * @throws TestInProgressException
+     * @throws com.beaglesecurity.execptions.TestInProgressException
      * 		   A test is in progress
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Application deleteApplication(String applicationToken);
@@ -324,21 +323,21 @@ public interface BeagleSecurityClient {
      * Gets signature of the given application
      * </p>
      * 
-     * @param applicationToken
-     * @return Application object
-     * @throws GeneralAPIException
+     * @param applicationToken is the unique token of application
+     * @return application object
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidApplicationTokenException
+     * @throws com.beaglesecurity.execptions.InvalidApplicationTokenException
      * 		   Given token is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	Signature getSignature(String applicationToken);
@@ -346,26 +345,26 @@ public interface BeagleSecurityClient {
 	/**
      * <p>
      * Verify signature of an application
-     * if signatureType is Plugin, then pluginType needs to provide. Otherwise pluginType will be null
+     * if signatureType is Plug-in, then pluginType needs to provide. Otherwise pluginType will be null
      * </p>
      * 
-     * @param applicationToken
-     * @param signatureType
-     * @param pluginType
-     * @return boolean true if verify signature success
-     * @throws GeneralAPIException
+     * @param applicationToken is the unique token of application
+     * @param signatureType is type of signature
+     * @param pluginType is type of plug-in
+     * @return true if verify signature success
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions.
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws InvalidApplicationTokenException
+     * @throws com.beaglesecurity.execptions.InvalidApplicationTokenException
      * 		   Given token is not valid
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	boolean verifySignature(String applicationToken, SignatureType signatureType, PluginType pluginType);
@@ -375,20 +374,20 @@ public interface BeagleSecurityClient {
      * Get the result json, which contains entire vulnerabilities found in the penetration testing process in json format
      * </p>
      * 
-     * @param applicationToken
-     * @param resultToken
-     * @return String json result
-     * @throws GeneralAPIException
+     * @param applicationToken is the unique token of application
+     * @param resultToken is the test start token to fetch result
+     * @return json result
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	String getTestResultJson(String applicationToken, String resultToken);
@@ -398,20 +397,20 @@ public interface BeagleSecurityClient {
      * Starts a new test
      * </p>
      * 
-     * @param applicationToken
+     * @param applicationToken is the unique token of application
      * 
-     * @return StartTest start test result
-     * @throws GeneralAPIException
+     * @return start test result
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	StartTest startTest(String applicationToken);
@@ -421,21 +420,21 @@ public interface BeagleSecurityClient {
      * Gets the status of a running session
      * </p>
      * 
-     * @param applicationToken
+     * @param applicationToken is the unique token of application
      * @param resultToken token of a session
      * 
-     * @return TestStatus status of the session
-     * @throws GeneralAPIException
+     * @return status of the session
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	TestStatus getTestStatus(String applicationToken, String resultToken);
@@ -445,20 +444,20 @@ public interface BeagleSecurityClient {
      * Stop a running test
      * </p>
      * 
-     * @param applicationToken
+     * @param applicationToken is the unique token of application
      * 
      * @return boolean true if stop test success, false otherwise
-     * @throws GeneralAPIException
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	boolean stopTest(String applicationToken);
@@ -468,21 +467,21 @@ public interface BeagleSecurityClient {
      * Gets a number of test sessions under an application
      * </p>
      * 
-     * @param applicationToken
-     * @param count
+     * @param applicationToken is the unique token of application
+     * @param count is the number of records to fetch
      * 
-     * @return List<TestSession> sessions
-     * @throws GeneralAPIException
+     * @return list of sessions
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	List<TestSession> getTestSessions(String applicationToken, int count);
@@ -492,18 +491,18 @@ public interface BeagleSecurityClient {
      * Gets all running sessions under a user
      * </p>
      * 
-     * @return List<TestRunningSession> running sessions
-     * @throws GeneralAPIException
+     * @return list of running sessions
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	List<TestRunningSession> getTestRunningSessions();
@@ -514,18 +513,18 @@ public interface BeagleSecurityClient {
      * </p>
      * 
      * @param teamId team id to find running session
-     * @return List<TestRunningSession> running sessions
-     * @throws GeneralAPIException
+     * @return list of running sessions
+     * @throws com.beaglesecurity.execptions.GeneralAPIException
      *         General exceptions
-     * @throws PlanNotSupportException
+     * @throws com.beaglesecurity.execptions.PlanNotSupportException
      *         The user plan is not supported
-     * @throws InvalidSessionException
+     * @throws com.beaglesecurity.execptions.InvalidSessionException
      * 		   Given token is not valid
-     * @throws UnAuthorizedException
+     * @throws com.beaglesecurity.execptions.UnAuthorizedException
      * 		   No permission to view the application
-     * @throws ForbiddenException
+     * @throws com.beaglesecurity.execptions.ForbiddenException
      *		   Forbidden
-     * @throws InternalServerErrorException
+     * @throws com.beaglesecurity.execptions.InternalServerErrorException
      * 		   Internal server error
      */
 	List<TestRunningSession> getTeamTestRunningSessions(String teamId);

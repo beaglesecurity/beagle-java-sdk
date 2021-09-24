@@ -23,6 +23,7 @@ public abstract class BeagleSecurityClientBase {
      * </p>
      * @param json string to convert as object
      * @param type the type to which the json string needs to convert
+     * @param <T> passing class type
      * @return Converted json object
      */
 	protected <T> T convertJsonToObject(String json, Class<T> type) {
@@ -40,6 +41,7 @@ public abstract class BeagleSecurityClientBase {
      * Generate common exceptions based or REST API return code
      * </p>
      * 
+     * @param errorCode is the code for generating custom exception
      * @throws GeneralAPIException
      *         General exceptions.
      * @throws UnAuthorizedException
