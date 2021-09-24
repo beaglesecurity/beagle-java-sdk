@@ -29,6 +29,20 @@ Beagle Security is a web application & API penetration testing tool that helps y
 
 You can find the complete set of REST APIs in the Beagle Security <a href="https://beaglesecurity.com/developer/apidoc">API documentation page</a>.
 
+### Adding Beagle Security SDK as a Maven Dependency
+
+Maven:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.beaglesecurity</groupId>
+        <artifactId>beagle-java-sdk</artifactId>
+        <version>1.0</version>
+    </dependency>
+</dependencies>
+```
+
 
 ## Basic Usage
 
