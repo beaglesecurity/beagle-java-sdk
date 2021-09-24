@@ -8,12 +8,12 @@
 
 	<groupId>com.beaglesecurity</groupId>
 	<artifactId>beagle-java-sdk</artifactId>
-	<version>1.0</version>
+	<version>1.1</version>
 	<packaging>jar</packaging>
 
 	<name>beagle-java-sdk</name>
 	<description>The Beagle Security SDK for Java provides Java APIs for building software for penetration testing using Beagle Security platform.</description>
-	<url>https://beaglesecurity.com/beagle-sdk</url>
+	<url>https://beaglesecurity.com/developer/apidoc</url>
 
 	<licenses>
 		<license>
