@@ -36,6 +36,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+          server-id: github
       - name: Publish to GitHub Packages
         run: mvn --batch-mode deploy
         env:
