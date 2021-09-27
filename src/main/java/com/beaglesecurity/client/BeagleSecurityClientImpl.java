@@ -53,6 +53,7 @@ import com.beaglesecurity.execptions.InvalidSessionException;
 import com.beaglesecurity.execptions.InvalidUrlException;
 import com.beaglesecurity.execptions.PlanNotSupportException;
 import com.beaglesecurity.execptions.ProjectAlreadyExistsException;
+import com.beaglesecurity.execptions.SignatureVerificationFailedException;
 import com.beaglesecurity.execptions.TestInProgressException;
 import com.beaglesecurity.execptions.UnAuthorizedException;
 import com.beaglesecurity.execptions.UrlAlreadyAddedException;
@@ -623,9 +624,9 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 		verify.setApplicationToken(applicationToken);
 		verify.setSignatureType(signatureType);
 		verify.setPluginType(pluginType);
-		HttpReturn ret = HttpUtil.postRequest(baseUrl + "applications/signature?application_token=" + applicationToken, verify, token);
+		HttpReturn ret = HttpUtil.postRequest(baseUrl + "applications/signature/verify?application_token=" + applicationToken, verify, token);
 		if (ret == null) {
-			throw new GeneralAPIException("Failed to get signature.");
+			throw new GeneralAPIException("Failed to verify signature.");
 		}		
 		if (ret.getCode() == HttpStatus.SC_OK) {
 			return true;					
@@ -641,6 +642,8 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 					throw new InvalidSessionException("The given token is invalid.");
 				case "NOT_AUTHORIZED":					
 					throw new UnAuthorizedException("You are not authorized.");
+				case "VERIFICATION_FAILED":
+					throw new SignatureVerificationFailedException("Failed to verify signature.");
 				case "FAILED":
 					throw new InvalidApplicationTokenException("Invalid application token.");
 				case "INVALID_PLUGIN_TYPE":
