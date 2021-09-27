@@ -564,7 +564,7 @@ public class BeagleSecurityClientImpl extends BeagleSecurityClientBase implement
 	 */
 	@Override
 	public Signature getSignature(String applicationToken) {
-		HttpReturn ret = HttpUtil.deleteRequest(baseUrl + "applications/signature?application_token=" + applicationToken, token);
+		HttpReturn ret = HttpUtil.getRequest(baseUrl + "applications/signature?application_token=" + applicationToken, token);
 		if (ret == null) {
 			throw new GeneralAPIException("Failed to get signature.");
 		}
