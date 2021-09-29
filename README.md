@@ -38,7 +38,7 @@ Maven:
     <dependency>
         <groupId>com.beaglesecurity</groupId>
         <artifactId>beagle-java-sdk</artifactId>
-        <version>1.1</version>
+        <version>1.2</version>
     </dependency>
 </dependencies>
 ```
